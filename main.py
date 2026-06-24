@@ -15,7 +15,7 @@ def main():
     # --------------------------------------------------
     # 1. Configuration & Initialization
     # --------------------------------------------------
-    config = load_config("configs/config.yaml")
+    config = load_config("config.yaml")
     set_seed(config.get("seed", 42))
 
     device = torch.device(
