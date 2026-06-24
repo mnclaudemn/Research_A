@@ -221,4 +221,3 @@ logger.log(
     training_time=training_time,
     trainable_params=trainable_params
 )
-```
