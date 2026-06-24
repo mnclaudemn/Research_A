@@ -1,14 +1,12 @@
 # config.yaml
 
 seed: 42
-# configs/config.yaml
-seed: 42
 dataset_root: "/content/drive/MyDrive/Brain-Tumor-ClassificationV/briscDataset"
 image_size: 224
 num_workers: 2
 
 
-model:
+Experiments:
 
   - Expr_name: resnet50_n1
     model_name: resnet50
