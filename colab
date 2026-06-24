@@ -1,0 +1,38 @@
+import os
+import sys
+from google.colab import drive
+
+# 1. Mount Google Drive securely
+drive.mount('/content/drive')
+
+# 2. Define standard environmental path constraints
+PROJECT_PATH = "/content/drive/MyDrive/researchA"
+DATASET_PATH = "/content/drive/MyDrive/Brain-Tumor-ClassificationV/briscDataset"
+DOWNLOAD_MODEL_PATH = "/content/drive/MyDrive/downloaded_model"
+
+# 3. Clone repository if it does not exist, otherwise skip to prevent errors
+if not os.path.exists(PROJECT_PATH):
+    print(f"Cloning repository into {PROJECT_PATH}...")
+    # Navigate to parent folder to clone safely
+    os.chdir("/content/drive/MyDrive")
+    !git clone https://github.com/mnclaudemn/researchA.git
+else:
+    print("Project repository already exists locally on Google Drive.")
+
+# 4. Navigate into the project folder and map system pathways
+os.chdir(PROJECT_PATH)
+if PROJECT_PATH not in sys.path:
+    sys.path.append(PROJECT_PATH)
+
+# 5. Automatically establish the 'results' directory for tracking output metrics
+RESULTS_PATH = os.path.join(PROJECT_PATH, "results")
+os.makedirs(RESULTS_PATH, exist_ok=True)
+
+print("\n" + "="*50)
+print(f"[STATUS] Project Directory Loaded: {PROJECT_PATH}")
+print(f"[STATUS] Dataset Target Path:      {DATASET_PATH}")
+print(f"[STATUS] Output Results Folder:    {RESULTS_PATH}")
+print("="*50 + "\n")
+
+# List current workspace contents
+!ls -lh
