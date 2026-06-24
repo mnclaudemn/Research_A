@@ -1,179 +1,242 @@
 import random
 import numpy as np
+import pandas as pd
 import torch
 import os
 import yaml
 import matplotlib.pyplot as plt
 
+# ==========================================================
+
+# Reproducibility
+
+# ==========================================================
+
 def set_seed(seed=42):
-    """
-    Set random seeds for reproducible experiments.
-    """
+"""
+Set random seeds for reproducible experiments.
+"""
 
-    random.seed(seed)
-    np.random.seed(seed)
-    torch.manual_seed(seed)
+```
+random.seed(seed)
+np.random.seed(seed)
+os.environ["PYTHONHASHSEED"] = str(seed)
 
-    if torch.cuda.is_available():
-        torch.cuda.manual_seed(seed)
-        torch.cuda.manual_seed_all(seed)
+torch.manual_seed(seed)
 
-    torch.backends.cudnn.deterministic = True
-    torch.backends.cudnn.benchmark = False
+if torch.cuda.is_available():
+    torch.cuda.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
 
-    try:
-        torch.use_deterministic_algorithms(True)
-    except Exception:
-        pass
+torch.backends.cudnn.deterministic = True
+torch.backends.cudnn.benchmark = False
 
+try:
+    torch.use_deterministic_algorithms(True)
+except Exception:
+    pass
+```
+
+# ==========================================================
+
+# Configuration
+
+# ==========================================================
 
 def load_config(path="configs/config.yaml"):
-    """
-    Load YAML configuration file.
+"""
+Load YAML configuration file.
 
-    Parameters
-    ----------
-    path : str
-        Path to config file.
+```
+Parameters
+----------
+path : str
+    Path to configuration file.
 
-    Returns
-    -------
-    dict
-        Configuration dictionary.
-    """
+Returns
+-------
+dict
+    Configuration dictionary.
+"""
 
-    if not os.path.exists(path):
-        raise FileNotFoundError(f"Config file not found: {path}")
+if not os.path.exists(path):
+    raise FileNotFoundError(f"Config file not found: {path}")
 
-    with open(path, "r", encoding="utf-8") as f:
-        config = yaml.safe_load(f)
+with open(path, "r", encoding="utf-8") as f:
+    config = yaml.safe_load(f)
 
-    return config
+return config
+```
 
-import os
-import pandas as pd
+# ==========================================================
 
+# Results I/O
+
+# ==========================================================
 
 def load_results(csv_path="results.csv"):
-    """
-    Load experiment results CSV file.
-    """
+"""
+Load experiment results CSV file.
+"""
 
-    if not os.path.exists(csv_path):
-        raise FileNotFoundError(f"{csv_path} not found!")
+```
+if not os.path.exists(csv_path):
+    raise FileNotFoundError(f"{csv_path} not found!")
 
-    return pd.read_csv(csv_path)
-
+return pd.read_csv(csv_path)
+```
 
 def save_result(path, result):
-    """
-    Append one experiment result to CSV.
+"""
+Append one experiment result to CSV.
 
-    Parameters
-    ----------
-    path : str
-        CSV file path.
+```
+Parameters
+----------
+path : str
+    CSV file path.
 
-    result : dict
-        Dictionary containing experiment metrics.
-    """
+result : dict
+    Dictionary containing experiment metrics.
+"""
 
-    file_exists = os.path.isfile(path)
+file_exists = os.path.isfile(path)
 
-    df = pd.DataFrame([result])
+df = pd.DataFrame([result])
 
-    df.to_csv(
-        path,
-        mode="a",
-        header=not file_exists,
-        index=False
-    )
+df.to_csv(
+    path,
+    mode="a",
+    header=not file_exists,
+    index=False
+)
+```
+
+# ==========================================================
+
+# Visualization
+
+# ==========================================================
 
 def plot_accuracy(csv_path="results.csv"):
-    """
-    Plot accuracy versus number of unfrozen blocks.
-    """
+"""
+Plot accuracy versus number of unfrozen blocks.
+"""
 
-    df = load_results(csv_path)
+```
+df = load_results(csv_path)
 
-    plt.figure(figsize=(8, 5))
+plt.figure(figsize=(8, 5))
 
-    for model in df["model"].unique():
-        sub = df[df["model"] == model]
-        sub = sub.sort_values("n_unfreeze")
+for model in df["model"].unique():
+    sub = df[df["model"] == model]
+    sub = sub.sort_values("n_unfreeze")
 
-        plt.plot(
-            sub["n_unfreeze"],
-            sub["accuracy"],
-            marker="o",
-            label=model
-        )
+    plt.plot(
+        sub["n_unfreeze"],
+        sub["accuracy"],
+        marker="o",
+        label=model
+    )
 
-    plt.title("Model Accuracy vs Fine-Tuning Depth")
-    plt.xlabel("Number of Unfrozen Blocks")
-    plt.ylabel("Accuracy (%)")
-    plt.legend()
-    plt.grid(True)
-    plt.tight_layout()
-    plt.show()
-
+plt.title("Model Accuracy vs Fine-Tuning Depth")
+plt.xlabel("Number of Unfrozen Blocks")
+plt.ylabel("Accuracy (%)")
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+plt.close()
+```
 
 def plot_loss(csv_path="results.csv"):
-    """
-    Plot validation loss versus number of unfrozen blocks.
-    """
+"""
+Plot validation loss versus number of unfrozen blocks.
+"""
 
-    df = load_results(csv_path)
+```
+df = load_results(csv_path)
 
-    plt.figure(figsize=(8, 5))
+plt.figure(figsize=(8, 5))
 
-    for model in df["model"].unique():
-        sub = df[df["model"] == model]
-        sub = sub.sort_values("n_unfreeze")
+for model in df["model"].unique():
+    sub = df[df["model"] == model]
+    sub = sub.sort_values("n_unfreeze")
 
-        plt.plot(
-            sub["n_unfreeze"],
-            sub["val_loss"],
-            marker="o",
-            label=model
-        )
+    plt.plot(
+        sub["n_unfreeze"],
+        sub["val_loss"],
+        marker="o",
+        label=model
+    )
 
-    plt.title("Validation Loss vs Fine-Tuning Depth")
-    plt.xlabel("Number of Unfrozen Blocks")
-    plt.ylabel("Validation Loss")
-    plt.legend()
-    plt.grid(True)
-    plt.tight_layout()
-    plt.show()
-
+plt.title("Validation Loss vs Fine-Tuning Depth")
+plt.xlabel("Number of Unfrozen Blocks")
+plt.ylabel("Validation Loss")
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+plt.close()
+```
 
 def best_model(csv_path="results.csv"):
-    """
-    Return experiment with highest accuracy.
-    """
+"""
+Return experiment with highest accuracy.
+"""
 
-    df = load_results(csv_path)
+```
+df = load_results(csv_path)
 
-    best = df.loc[df["accuracy"].idxmax()]
+best = df.loc[df["accuracy"].idxmax()]
 
-    print("\n========== BEST MODEL ==========\n")
-    print(best)
+print("\n========== BEST MODEL ==========\n")
+print(best)
 
-    return best
+return best
+```
+
+# ==========================================================
+
+# Model Utilities
+
+# ==========================================================
 
 def print_trainable_layers(model):
-    """
-    Print trainable layers and parameter count.
-    """
+"""
+Print trainable layers and parameter count.
+"""
 
-    total = 0
+```
+total = 0
 
-    print("\nTrainable parameters:\n")
+print("\nTrainable parameters:\n")
 
-    for name, param in model.named_parameters():
-        if param.requires_grad:
-            print(name)
-            total += param.numel()
+for name, param in model.named_parameters():
+    if param.requires_grad:
+        print(name)
+        total += param.numel()
 
-    print(f"\nTotal trainable parameters: {total:,}")
+print(f"\nTotal trainable parameters: {total:,}")
+```
+
+def count_parameters(model):
+"""
+Return trainable and total parameters.
+"""
+
+```
+trainable = sum(
+    p.numel() for p in model.parameters()
+    if p.requires_grad
+)
+
+total = sum(
+    p.numel() for p in model.parameters()
+)
+
+print(f"Trainable parameters: {trainable:,}")
+print(f"Total parameters: {total:,}")
+
+return trainable, total
 
