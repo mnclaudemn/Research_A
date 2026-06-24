@@ -42,7 +42,13 @@ def load_results(csv_path="results.csv"):
 
     return pd.read_csv(csv_path)
 
+def save_result(path, result):
 
+    file_exists = os.path.isfile(path)
+
+    df = pd.DataFrame([result])
+
+    df.to_csv(path, mode="a", header=not file_exists, index=False)
 # ==========================
 # 1. Accuracy comparison
 # ==========================
