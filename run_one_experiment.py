@@ -34,6 +34,7 @@ def run_one_experiment(
     # ==================================================
     # Configuration
     # ==================================================
+    config = load_config("config.yaml")
     expr_name = config["expr_name"]
     model_name = config["model_name"]
     n_unfreeze = config["n_unfreeze"]
