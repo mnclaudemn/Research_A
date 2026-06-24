@@ -37,9 +37,8 @@ def main():
     # --------------------------------------------------
     # 3. Data Ingestion Pipeline
     # --------------------------------------------------
-    batch_size = config.get("model", {}).get("batch_size", config.get("batch_size", 16))
+    batch_size = config.get("batch_size", 16)
     image_size = config.get("image_size", 224)
-
     train_loader, val_loader, test_loader, num_classes = get_loaders(
         dataset_path=dataset_root,
         batch_size=batch_size,
@@ -52,8 +51,8 @@ def main():
     logger = ExperimentLogger(file_path="experiments.xlsx")
 
     run_one_experiment(
-        model_name=config["model"]["name"],
-        n_unfreeze=config["model"]["n_unfreeze"],
+        model_name = config["model_name"],
+        n_unfreeze = config["n_unfreeze"],
         train_loader=train_loader,
         val_loader=val_loader,
         test_loader=test_loader,
