@@ -6,7 +6,7 @@ image_size: 224
 num_workers: 2
 
 
-Experiments:
+experiments:
 
   - Expr_name: resnet50_n1
     model_name: resnet50
