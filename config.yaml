@@ -2,20 +2,16 @@
 
 seed: 42
 # configs/config.yaml
+seed: 42
 dataset_root: "/content/drive/MyDrive/Brain-Tumor-ClassificationV/briscDataset"
 image_size: 224
-seed: 42
+batch_size: 16
 num_workers: 2
-#dataset:
-  #train_path: /content/train
- # test_path: /content/test
- # image_size: 224
-  #num_workers: 2
 
-experiments:
 
-  - name: resnet50_n1
-    model: resnet50
+model:
+
+  - name: resnet50
     n_unfreeze: 1
     batch_size: 16
     epochs: 10
@@ -28,14 +24,13 @@ experiments:
     epochs: 10
     lr: 0.0001
 
-  - name: densenet121_n2
-    model: densenet121
+  - name: densenet121
     n_unfreeze: 2
     batch_size: 16
     epochs: 10
     lr: 0.0001
 
-  - name: dino_n2
+  - name: dino
     model: dino
     n_unfreeze: 2
     batch_size: 8
