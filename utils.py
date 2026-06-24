@@ -4,8 +4,6 @@ import torch
 import os
 import yaml
 import matplotlib.pyplot as plt
-from utils.io import load_results
-
 
 def set_seed(seed=42):
     """
