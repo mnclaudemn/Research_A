@@ -5,33 +5,10 @@ dataset_root: "/content/drive/MyDrive/Brain-Tumor-ClassificationV/briscDataset"
 image_size: 224
 num_workers: 2
 
+expr_name: resnet50_n1
+model_name: resnet50
+n_unfreeze: 1
+batch_size: 16
+epochs: 10
+lr: 0.0001
 
-experiments:
-
-  - expr_name: resnet50_n1
-    model_name: resnet50
-    n_unfreeze: 1
-    batch_size: 16
-    epochs: 10
-    lr: 0.0001
-
-  - expr_name: resnet50_n2
-    model_name: resnet50
-    n_unfreeze: 2
-    batch_size: 16
-    epochs: 10
-    lr: 0.0001
-
-  - expr_name: densenet121_n1
-    model_name: densenet121
-    n_unfreeze: 2
-    batch_size: 16
-    epochs: 10
-    lr: 0.0001
-
-  - expr_name: dino_n1
-    model_name: dino
-    n_unfreeze: 2
-    batch_size: 8
-    epochs: 20
-    lr: 0.00005
